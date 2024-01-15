@@ -1,6 +1,5 @@
 const Product = require("../models/product.js");
 const Customer = require("../models/customer.js");
-const product = require("../models/product.js");
 
 const createProduct = async (req, res) => {
   try {
@@ -143,13 +142,110 @@ const searchProductbyCategory = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  try {
+    const deleteProduct = await Product.findByIdAndDelete(req.params.id);
+
+    await Customer.updateMany(
+      { "cartDetails._id": deleteProduct._id },
+      { $pull: { cartDetails: { _id: deleteProduct._id } } }
+    );
+
+    res.send(deleteProduct);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const deleteProducts = async (req, res) => {
+  try {
+    const deletionResult = await Product.deleteMany({ seller: req.params.id });
+
+    const deletedCount = deletionResult.deletedCount || 0;
+
+    if (deletedCount === 0) {
+      res.send({ message: "No products found to delete" });
+      return;
+    }
+
+    const deletedProducts = await Product.find({ seller: req.params.id });
+
+    await Customer.updateMany(
+      {
+        "cartDetails._id": {
+          $in: deletedProducts.map((product) => product._id),
+        },
+      },
+      {
+        $pull: {
+          cartDetails: {
+            _id: { $in: deletedProducts.map((product) => product._id) },
+          },
+        },
+      }
+    );
+
+    res.send(deletionResult);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const getAddedToCartProducts = async (req, res) => {
+  try {
+    const sellerId = req.params.id;
+
+    const customersWithSellerProduct = await Customer.find({
+      "cartDetails.seller": sellerId,
+    });
+
+    const productMap = new Map(); // Use a Map to aggregate products by ID
+    customersWithSellerProduct.forEach((customer) => {
+      customer.cartDetails.forEach((cartItem) => {
+        if (cartItem.seller.toString() === sellerId) {
+          const productId = cartItem._id.toString();
+          if (productMap.has(productId)) {
+            // If product ID already exists, update the quantity
+            const existingProduct = productMap.get(productId);
+            existingProduct.quantity += cartItem.quantity;
+          } else {
+            // If product ID does not exist, add it to the Map
+            productMap.set(productId, {
+              productName: cartItem.productName,
+              quantity: cartItem.quantity,
+              category: cartItem.category,
+              subcategory: cartItem.subcategory,
+              productID: productId,
+            });
+          }
+        }
+      });
+    });
+
+    const productsInCart = Array.from(productMap.values());
+
+    if (productsInCart.length > 0) {
+      res.send(productsInCart);
+    } else {
+      res.send({
+        message: "No products from this seller are added to cart by customers.",
+      });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   createProduct,
   addReview,
   searchProduct,
   searchProductbyCategory,
+  deleteProduct,
+  deleteProducts,
   getProducts,
   getSellerProducts,
   getProductDetail,
+  getAddedToCartProducts,
   updateProduct,
 };

@@ -66,7 +66,34 @@ const customerLogIn = async (req, res) => {
   }
 };
 
+const getCartDetail = async (req, res) => {
+  try {
+    let customer = await Customer.findById(req.params.id);
+    if (customer) {
+      res.send(customer.cartDetails);
+    } else {
+      res.send({ message: "No Customer found" });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const cartUpdate = async (req, res) => {
+  try {
+    let customer = await Customer.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+
+    return res.send(customer.cartDetails);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 module.exports = {
   customerRegister,
   customerLogIn,
+  getCartDetail,
+  cartUpdate,
 };
