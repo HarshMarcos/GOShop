@@ -32,7 +32,7 @@ const {
 router.post("/CustomerRegister", customerRegister);
 router.post("/CustomerLogin", customerLogIn);
 router.get("/cart-details/:id", getCartDetail);
-router.get("/cart-update/:id", cartUpdate);
+router.get("/CustomerUpdate/:id", cartUpdate);
 
 //seller
 router.post("/SellerRegister", sellerRegister);
