@@ -1,10 +1,11 @@
-import React from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import { Divider, Box, Typography, Button, styled, Container } from '@mui/material';
 import Carousel from 'react-multi-carousel';
 import "react-multi-carousel/lib/styles.css";
 
 
 const Slide = ({ products, title }) => {
+    const navigate = useNavigate();
     return (
         <Component>
             <Deal>
@@ -12,7 +13,7 @@ const Slide = ({ products, title }) => {
 
                 <ViewAllButton
                     variant="contained"
-
+                    onClick={() => { navigate("/Products") }}
                 >
                     View All
                 </ViewAllButton>
@@ -20,7 +21,7 @@ const Slide = ({ products, title }) => {
 
             <Divider />
 
-            {/* <Carousel
+            <Carousel
                 swipeable={false}
                 draggable={false}
                 responsive={responsive}
@@ -33,8 +34,30 @@ const Slide = ({ products, title }) => {
                 containerClass="carousel-container"
                 dotListClass="custom-dot-list-style"
                 itemClass="carousel-item-padding-40-px">
-
-            </Carousel> */}
+                {
+                    products.map((product, index) => (
+                        <Link
+                            key={index}
+                            to={`/product/view/${product._id}`}
+                            style={{ textDecoration: 'none' }}
+                        >
+                            <Box
+                                textAlign="center"
+                                style={{ padding: '25px 15px' }}
+                            >
+                                <Image src={product.productImage} />
+                                <TitleText style={{ fontWeight: 600, color: '#212121' }}>{product.productName}</TitleText>
+                                <TextContainer>
+                                    <Text style={{ color: '#525050', textDecoration: "line-through" }}>{product.price.mrp}</Text>
+                                    <Text>₹{product.price.cost}</Text>
+                                    <Text style={{ color: 'green' }}>{product.price.discountPercent}</Text>
+                                </TextContainer>
+                                <Text style={{ color: '#212121', opacity: '.6' }}>{product.tagline}</Text>
+                            </Box>
+                        </Link>
+                    ))
+                }
+            </Carousel>
         </Component>
     )
 }
@@ -64,14 +87,14 @@ const Component = styled(Box)`
 `;
 
 const Deal = styled(Box)`
-    display:flex;
-    padding:15px 20px;
+    display: flex;    
+    padding: 15px 20px;
 `
 
 const DealText = styled(Typography)`
     font-size: 22px;
     font-weight: 600;
-    line=height: 32px;
+    line-height: 32px;
     margin-right: 25px;
 `
 
@@ -83,4 +106,30 @@ const ViewAllButton = styled(Button)`
     &:hover {
       background-color: #7a1ccb;
     }
+`;
+
+const Image = styled('img')({
+    width: 'auto',
+    height: 150
+})
+
+const TitleText = styled(Typography)`
+    font-size: 14px;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+`;
+
+const Text = styled(Typography)`
+    font-size: 14px;
+    margin-top: 5px
+`
+
+const TextContainer = styled(Container)`
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 8px;
 `;

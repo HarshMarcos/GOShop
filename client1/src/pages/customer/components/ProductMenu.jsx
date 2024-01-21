@@ -3,30 +3,103 @@ import { styled, alpha } from '@mui/material/styles';
 import { LightPurpleButton } from '../../../utils/buttonStyles'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProducts, getSearchedProducts } from '../../../redux/userHandler';
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
 
 const ProductMenu = ({ dropName }) => {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const location = useLocation();
+
+    const { productData } = useSelector(state => state.user);
+
+    React.useEffect(() => {
+        dispatch(getProducts());
+    }, [dispatch]);
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const uniqueItems = productData.filter((data, index, self) => {
+        return (dropName === "Categories" ?
+            self.findIndex((item) => item.category === data.category) === index :
+            self.findIndex((item) => item.subcategory === data.subcategory) === index
+        );
+    });
+
+    const catHandler = (key) => {
+        setAnchorEl(null);
+        if (dropName === "Categories") {
+            dispatch(getSearchedProducts("searchProductbyCategory", key));
+        }
+        else {
+            dispatch(getSearchedProducts("searchProductbySubCategory", key));
+        }
+        if (location.pathname !== "/ProductSearch") {
+            navigate("/ProductSearch");
+        }
+    }
+
     return (
         <div style={{ marginLeft: "2rem" }}>
             <LightPurpleButton
                 id='demo-customized-button'
-                aria-controls=''
+                aria-controls={open ? 'demo-customized-menu' : undefined}
+                aria-expanded={open ? 'true' : undefined}
                 aria-haspopup='true'
+                onClick={handleClick}
                 disableElevation
+                endIcon={open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
             >
                 {dropName}
             </LightPurpleButton>
 
-            <StyledMenu
-                id="demo-customized-menu"
-                MenuListProps={{
-                    'aria-labelledby': 'demo-customized-button',
-                }}
-            >
-                <MenuItem>a</MenuItem>
-                <MenuItem>b</MenuItem>
-                <MenuItem>c</MenuItem>
-                <MenuItem>d</MenuItem>
-            </StyledMenu>
+            {
+                dropName === "Categories" ?
+                    <StyledMenu
+                        id="demo-customized-menu"
+                        MenuListProps={{
+                            'aria-labelledby': 'demo-customized-button',
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                    >
+                        {uniqueItems.map((data) => (
+                            <MenuItem onClick={() => { catHandler(data.category) }} key={data._id}>
+                                {data.category}
+                            </MenuItem>
+                        ))}
+                    </StyledMenu>
+                    :
+                    <StyledMenu
+                        id="demo-customized-menu"
+                        MenuListProps={{
+                            'aria-labelledby': 'demo-customized-button',
+                        }}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                    >
+                        {uniqueItems.map((data) => (
+                            <MenuItem onClick={() => { catHandler(data.subcategory) }} key={data._id}>
+                                {data.subcategory}
+                            </MenuItem>
+                        ))}
+                    </StyledMenu>
+            }
         </div>
     )
 }

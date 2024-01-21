@@ -1,35 +1,83 @@
-const mongooose = require("mongoose");
+const mongoose = require("mongoose");
 
-const customerSchema = new mongooose.Schema(
-  {
-    first_name: {
+const customerSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    default: "Customer",
+  },
+  cartDetails: [
+    {
+      productName: {
+        type: String,
+      },
+      price: {
+        mrp: {
+          type: Number,
+        },
+        cost: {
+          type: Number,
+        },
+        discountPercent: {
+          type: Number,
+        },
+      },
+      subcategory: {
+        type: String,
+      },
+      productImage: {
+        type: String,
+      },
+      category: {
+        type: String,
+      },
+      description: {
+        type: String,
+      },
+      tagline: {
+        type: String,
+      },
+      quantity: {
+        type: Number,
+      },
+      seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "seller",
+      },
+    },
+  ],
+  shippingData: {
+    address: {
       type: String,
     },
-    last_name: {
+    city: {
       type: String,
     },
-    username: {
+    state: {
       type: String,
-      required: true,
     },
-    email: {
+    country: {
       type: String,
-      unique: true,
-      required: true,
     },
-    password: {
-      type: String,
-      required: true,
+    pinCode: {
+      type: Number,
     },
-    is_active: {
-      type: Boolean,
-    },
-    role: {
-      type: String,
-      default: "Customer",
+    phoneNo: {
+      type: Number,
     },
   },
-  { timestamps: true }
-);
+});
 
-module.exports = mongooose.model("Customer", customerSchema);
+module.exports = mongoose.model("customer", customerSchema);

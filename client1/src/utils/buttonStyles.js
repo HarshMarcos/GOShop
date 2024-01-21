@@ -20,3 +20,12 @@ export const BlueButton = styled(Button)`
     }
   }
 `;
+export const BasicButton = styled(Button)`
+  && {
+    background-color: #4d1c9c;
+    color: #fff;
+    &:hover {
+      background-color: #7a1ccb;
+    }
+  }
+`;

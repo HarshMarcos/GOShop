@@ -22,6 +22,7 @@ const {
   deleteProduct,
   deleteProducts,
   getAddedToCartProducts,
+  searchProductbySubCategory,
 } = require("../controllers/productController.js");
 const {
   sellerRegister,
@@ -55,6 +56,7 @@ router.get("/cart/:id", getAddedToCartProducts);
 
 router.get("/searchProduct/:key", searchProduct);
 router.get("/searchProductbyCategory/:key", searchProductbyCategory);
+router.get("/searchProductbySubCategory/:key", searchProductbySubCategory);
 
 router.delete("/delteProduct/:id", deleteProduct);
 router.delete("/delteProducts/:id", deleteProducts);

@@ -142,6 +142,24 @@ const searchProductbyCategory = async (req, res) => {
   }
 };
 
+const searchProductbySubCategory = async (req, res) => {
+  try {
+    const key = req.params.key;
+
+    let products = await Product.find({
+      $or: [{ subcategory: { $regex: key, $options: "i" } }],
+    }).populate("seller", "shopName");
+
+    if (products.length > 0) {
+      res.send(products);
+    } else {
+      res.send({ message: "No products found" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 const deleteProduct = async (req, res) => {
   try {
     const deleteProduct = await Product.findByIdAndDelete(req.params.id);
@@ -248,4 +266,5 @@ module.exports = {
   getProductDetail,
   getAddedToCartProducts,
   updateProduct,
+  searchProductbySubCategory,
 };
