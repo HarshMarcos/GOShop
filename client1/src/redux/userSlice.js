@@ -187,6 +187,17 @@ const userSlice = createSlice({
         state.isLoggedIn = false;
       }
     },
+    getCustomersListFailed: (state, action) => {
+      state.responseCustomersList = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    customersListSuccess: (state, action) => {
+      state.customersList = action.payload;
+      state.responseCustomersList = null;
+      state.loading = false;
+      state.error = null;
+    },
   },
 });
 
@@ -210,6 +221,8 @@ export const {
   addToCart,
   updateFailed,
   isTokenValid,
+  getCustomersListFailed,
+  customersListSuccess,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

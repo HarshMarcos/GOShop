@@ -3,13 +3,16 @@ import AddProduct from './pages/AddProduct'
 import { Box, CssBaseline, Divider, IconButton, List, Toolbar, Typography } from '@mui/material'
 import { AppBar, Drawer, NavLogo } from '../../utils/styles';
 import { useSelector } from 'react-redux';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import ListIcon from '@mui/icons-material/List';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import AccountMenu from './components/AccountMenu';
 import CloseIcon from '@mui/icons-material/Close';
 import SideBar from './components/SideBar';
 import Logout from '../Logout';
+import SellerHomePage from './pages/SellerHomePage';
+import SellerProfile from './pages/SellerProfile';
+import ShowCustomers from './pages/ShowCustomers';
 
 const SellerDashboard = () => {
     const [open, setOpen] = useState(false);
@@ -114,7 +117,12 @@ const SellerDashboard = () => {
                 <Box component="main" sx={styles.boxStyled}>
                     <Toolbar />
                     <Routes>
+                        <Route path="/" element={<SellerHomePage />} />
+                        <Route path='*' element={<Navigate to="/" />} />
+                        <Route path="/Seller/dashboard" element={<SellerHomePage />} />
+                        <Route path='/Seller/profile' element={<SellerProfile />} />
                         <Route path="/Seller/addproduct" element={<AddProduct />} />
+                        <Route path='Seller/orders/customers/:id' element={<ShowCustomers />} />
                         <Route path="/logout" element={<Logout />} />
                     </Routes>
                 </Box>

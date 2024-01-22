@@ -4,6 +4,8 @@ import {
   authFailed,
   authRequest,
   authSuccess,
+  customersListSuccess,
+  getCustomersListFailed,
   getError,
   getProductDetailsFailed,
   getRequest,
@@ -135,6 +137,22 @@ export const updateStuff = (fields, id, address) => async (dispatch) => {
       dispatch(updateFailed(result.data.message));
     } else {
       dispatch(stuffUpdated());
+    }
+  } catch (error) {}
+};
+
+export const getCustomers = (id, address) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axios.get(
+      `http://localhost:8080/api/${address}/${id}`
+    );
+
+    if (result.data.message) {
+      dispatch(getCustomersListFailed(result.data.message));
+    } else {
+      dispatch(customersListSuccess(result.data));
     }
   } catch (error) {}
 };

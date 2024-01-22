@@ -29,3 +29,15 @@ export const BasicButton = styled(Button)`
     }
   }
 `;
+
+export const IndigoButton = styled(Button)`
+  && {
+    background-color: #2f2b80;
+    color: white;
+    &:hover {
+      background-color: #534ea6;
+      border-color: #473d90;
+      box-shadow: none;
+    }
+  }
+`;
