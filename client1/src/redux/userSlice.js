@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { jwtDecode } from "jwt-decode";
 
 const initialState = {
   status: "idle",
@@ -159,6 +160,33 @@ const userSlice = createSlice({
       state.responseReview = action.payload;
       state.error = null;
     },
+    authLogout: (state) => {
+      localStorage.removeItem("user");
+      state.status = "idle";
+      state.loading = false;
+      state.currentUser = null;
+      state.currentRole = null;
+      state.currentToken = null;
+      state.error = null;
+      state.response = true;
+      state.isLoggedIn = false;
+    },
+    isTokenValid: (state) => {
+      const decodedToken = jwtDecode(state.currentToken);
+
+      if (state.currentToken && decodedToken.exp * 1000 > Date.now()) {
+        state.isLoggedIn = true;
+      } else {
+        localStorage.removeItem("user");
+        state.currentUser = null;
+        state.currentRole = null;
+        state.currentToken = null;
+        state.status = "idle";
+        state.response = null;
+        state.error = null;
+        state.isLoggedIn = false;
+      }
+    },
   },
 });
 
@@ -167,6 +195,7 @@ export const {
   authSuccess,
   authFailed,
   authError,
+  authLogout,
   underControl,
   updateCurrentUser,
   stuffUpdated,
@@ -180,6 +209,7 @@ export const {
   getProductDetailsFailed,
   addToCart,
   updateFailed,
+  isTokenValid,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
