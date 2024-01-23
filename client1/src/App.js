@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getProducts } from "./redux/userHandler";
 import { isTokenValid } from "./redux/userSlice";
+import Profile from "./pages/customer/pages/Profile";
+import CustomerSearch from "./pages/customer/pages/CustomerSearch";
 
 function App() {
   const dispatch = useDispatch();
@@ -65,6 +67,8 @@ function App() {
             <Route path="*" element={<Navigate to="/" />} />
             <Route path="/Products" element={<Products />} />
             <Route path="/product/view/:id" element={<ViewProduct />} />
+            <Route path="/Search" element={<CustomerSearch />} />
+            <Route path="/Profile" element={<Profile />} />
             <Route path="/Logout" element={<Logout />} />
           </Routes>
         </>
