@@ -13,6 +13,7 @@ import { getProducts } from "./redux/userHandler";
 import { isTokenValid } from "./redux/userSlice";
 import Profile from "./pages/customer/pages/Profile";
 import CustomerSearch from "./pages/customer/pages/CustomerSearch";
+import CheckoutOrder from "./pages/customer/pages/CheckoutOrder";
 
 function App() {
   const dispatch = useDispatch();
@@ -67,7 +68,13 @@ function App() {
             <Route path="*" element={<Navigate to="/" />} />
             <Route path="/Products" element={<Products />} />
             <Route path="/product/view/:id" element={<ViewProduct />} />
-            <Route path="/Search" element={<CustomerSearch />} />
+            <Route path="/Search" element={<CustomerSearch mode="Mobile" />} />
+            <Route
+              path="/ProductSearch"
+              element={<CustomerSearch mode="Desktop" />}
+            />
+
+            <Route path="/Checkout" element={<CheckoutOrder />} />
             <Route path="/Profile" element={<Profile />} />
             <Route path="/Logout" element={<Logout />} />
           </Routes>
