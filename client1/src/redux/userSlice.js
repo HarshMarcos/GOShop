@@ -198,6 +198,29 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
+    removeFromCart: (state, action) => {
+      const existingProduct = state.currentUser.cartDetails.find(
+        (cartItem) => cartItem._id === action.payload._id
+      );
+
+      if (existingProduct) {
+        if (existingProduct.quantity > 1) {
+          existingProduct.quantity -= 1;
+        } else {
+          const index = state.currentUser.cartDetails.findIndex(
+            (cartItem) => cartItem._id === action.payload._id
+          );
+          if (index !== -1) {
+            state.currentUser.cartDetails.splice(index, 1);
+          }
+        }
+      }
+      updateCartDetailsInLocalStorage(state.currentUser.cartDetails);
+    },
+    removeAllFromCart: (state) => {
+      state.currentUser.cartDetails = [];
+      updateCartDetailsInLocalStorage([]);
+    },
   },
 });
 
@@ -223,6 +246,8 @@ export const {
   isTokenValid,
   getCustomersListFailed,
   customersListSuccess,
+  removeFromCart,
+  removeAllFromCart,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

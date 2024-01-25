@@ -21,6 +21,7 @@ const Products = ({ productData }) => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  console.log(productData);
   const currentItems = productData.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleAddToCart = (event, product) => {

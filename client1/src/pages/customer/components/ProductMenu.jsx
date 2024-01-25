@@ -1,24 +1,27 @@
-import React from 'react'
+import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import { LightPurpleButton } from '../../../utils/buttonStyles'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { LightPurpleButton } from '../../../utils/buttonStyles';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, getSearchedProducts } from '../../../redux/userHandler';
-import { KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material'
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const ProductMenu = ({ dropName }) => {
+const ProductsMenu = ({ dropName }) => {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+
     const dispatch = useDispatch();
+
     const location = useLocation();
 
     const { productData } = useSelector(state => state.user);
 
     React.useEffect(() => {
         dispatch(getProducts());
-    }, [dispatch]);
+    }, [dispatch])
 
     const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -55,17 +58,16 @@ const ProductMenu = ({ dropName }) => {
     return (
         <div style={{ marginLeft: "2rem" }}>
             <LightPurpleButton
-                id='demo-customized-button'
+                id="demo-customized-button"
                 aria-controls={open ? 'demo-customized-menu' : undefined}
+                aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
-                aria-haspopup='true'
-                onClick={handleClick}
                 disableElevation
+                onClick={handleClick}
                 endIcon={open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
             >
                 {dropName}
             </LightPurpleButton>
-
             {
                 dropName === "Categories" ?
                     <StyledMenu
@@ -101,10 +103,11 @@ const ProductMenu = ({ dropName }) => {
                     </StyledMenu>
             }
         </div>
-    )
+    );
 }
 
-export default ProductMenu
+export default ProductsMenu;
+
 const StyledMenu = styled((props) => (
     <Menu
         elevation={0}

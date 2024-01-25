@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { updateCustomer } from '../redux/userHandler';
+import Cart from './customer/components/Cart';
 
 const Navbar = () => {
     const { currentUser, currentRole } = useSelector(state => state.user);
@@ -335,7 +336,7 @@ const Navbar = () => {
                         },
                     }}
                 >
-                    {/* <Cart setIsCartOpen={setIsCartOpen} /> */}
+                    <Cart setIsCartOpen={setIsCartOpen} />
                 </Drawer>
             }
         </AppBar >

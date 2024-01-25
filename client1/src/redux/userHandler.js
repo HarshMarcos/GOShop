@@ -96,7 +96,7 @@ export const getSearchedProducts = (address, key) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.Axios(
+    const result = await axios.get(
       `http://localhost:8080/api/${address}/${key}`
     );
     if (result.data.message) {

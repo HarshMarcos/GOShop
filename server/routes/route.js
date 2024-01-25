@@ -33,7 +33,7 @@ const {
 router.post("/CustomerRegister", customerRegister);
 router.post("/CustomerLogin", customerLogIn);
 router.get("/cart-details/:id", getCartDetail);
-router.get("/CustomerUpdate/:id", cartUpdate);
+router.put("/CustomerUpdate/:id", cartUpdate);
 
 //seller
 router.post("/SellerRegister", sellerRegister);
@@ -54,7 +54,7 @@ router.get("/getSellerProducts/:id", getSellerProducts);
 router.get("/getProductDetail/:id", getProductDetail);
 router.get("/cart/:id", getAddedToCartProducts);
 
-router.get("/searchProduct/:key", searchProduct);
+router.get("/searchProducts/:key", searchProduct);
 router.get("/searchProductbyCategory/:key", searchProductbyCategory);
 router.get("/searchProductbySubCategory/:key", searchProductbySubCategory);
 

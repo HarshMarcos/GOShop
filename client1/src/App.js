@@ -38,7 +38,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/Home" element={<Home />} />
             <Route path="*" element={<Navigate to="/" />} />
-            <Route path="/Products" element={<Products />} />
+            <Route
+              path="/Products"
+              element={<Products productData={productData} />}
+            />
             <Route path="/product/view/:id" element={<ViewProduct />} />
             <Route
               path="/Customerregister"
@@ -66,7 +69,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/Home" element={<Home />} />
             <Route path="*" element={<Navigate to="/" />} />
-            <Route path="/Products" element={<Products />} />
+            <Route
+              path="/Products"
+              element={<Products productData={productData} />}
+            />
             <Route path="/product/view/:id" element={<ViewProduct />} />
             <Route path="/Search" element={<CustomerSearch mode="Mobile" />} />
             <Route
