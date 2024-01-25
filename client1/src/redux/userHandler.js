@@ -10,9 +10,11 @@ import {
   getProductDetailsFailed,
   getRequest,
   getSearchFailed,
+  getSpecificProductsFailed,
   productDetailsSuccess,
   productSuccess,
   setFilteredProducts,
+  specificProductSuccess,
   stuffUpdated,
   updateCurrentUser,
   updateFailed,
@@ -155,4 +157,40 @@ export const getCustomers = (id, address) => async (dispatch) => {
       dispatch(customersListSuccess(result.data));
     }
   } catch (error) {}
+};
+
+export const addStuff1 = (address, fields) => async (dispatch) => {
+  try {
+    const result = await axios.post(
+      `http://localhost:8080/api/${address}`,
+      fields,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    if (result.data.message) {
+      dispatch(authFailed(result.data.message));
+    } else {
+      dispatch(stuffUpdated());
+    }
+  } catch (error) {
+    dispatch(authError(error));
+  }
+};
+
+export const getSpeicificProducts = (id, address) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axios.get(
+      `http://localhost:8080/api/${address}/${id}`
+    );
+    if (result.data.message) {
+      dispatch(getSpecificProductsFailed(result.data.message));
+    } else {
+      dispatch(specificProductSuccess(result.data));
+    }
+  } catch (error) {
+    dispatch(getError());
+  }
 };

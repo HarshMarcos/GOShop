@@ -14,6 +14,9 @@ import { isTokenValid } from "./redux/userSlice";
 import Profile from "./pages/customer/pages/Profile";
 import CustomerSearch from "./pages/customer/pages/CustomerSearch";
 import CheckoutOrder from "./pages/customer/pages/CheckoutOrder";
+import CheckoutAftermath from "./pages/customer/pages/CheckoutAftermath";
+import CustomerOrders from "./pages/customer/pages/CustomerOrders";
+import ViewOrder from "./pages/customer/pages/ViewOrder";
 
 function App() {
   const dispatch = useDispatch();
@@ -81,6 +84,10 @@ function App() {
             />
 
             <Route path="/Checkout" element={<CheckoutOrder />} />
+            <Route path="/product/buy/:id" element={<CheckoutOrder />} />
+            <Route path="/Aftermath" element={<CheckoutAftermath />} />
+            <Route path="/Orders" element={<CustomerOrders />} />
+            <Route path="/order/view/:id" element={<ViewOrder />} />
             <Route path="/Profile" element={<Profile />} />
             <Route path="/Logout" element={<Logout />} />
           </Routes>

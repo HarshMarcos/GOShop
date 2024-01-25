@@ -40,8 +40,8 @@ router.post("/SellerRegister", sellerRegister);
 router.post("/SellerLogIn", sellerLogIn);
 
 //orders
-router.post("/new-order", newOrder);
-router.get("/order-customer/:id", getOrderedProductsByCustomer);
+router.post("/newOrder", newOrder);
+router.get("/getOrderedProductsByCustomer/:id", getOrderedProductsByCustomer);
 
 //product
 router.post("/CreateNewProduct", createProduct);

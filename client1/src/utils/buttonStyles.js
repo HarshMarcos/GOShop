@@ -41,3 +41,13 @@ export const IndigoButton = styled(Button)`
     }
   }
 `;
+
+export const GreenButton = styled(Button)`
+  && {
+    background-color: #133104;
+    color: #fff;
+    &:hover {
+      background-color: #266810;
+    }
+  }
+`;

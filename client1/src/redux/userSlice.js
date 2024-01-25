@@ -221,6 +221,37 @@ const userSlice = createSlice({
       state.currentUser.cartDetails = [];
       updateCartDetailsInLocalStorage([]);
     },
+    fetchProductDetailsFromCart: (state, action) => {
+      const productIdToFetch = action.payload;
+      const productInCart = state.currentUser.cartDetails.find(
+        (cartItem) => cartItem._id === productIdToFetch
+      );
+      if (productInCart) {
+        state.productDetailsCart = { ...productInCart };
+      } else {
+        state.productDetailsCart = null;
+      }
+    },
+    removeSpecificProduct: (state, action) => {
+      const productIdToRemove = action.payload;
+      const updatedCartDetails = state.currentUser.cartDetails.filter(
+        (cartItem) => cartItem._id !== productIdToRemove
+      );
+
+      state.currentUser.cartDetails = updatedCartDetails;
+      updateCartDetailsInLocalStorage(updatedCartDetails);
+    },
+    getSpecificProductsFailed: (state, action) => {
+      state.responseSpecificProducts = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    specificProductSuccess: (state, action) => {
+      state.specificProductData = action.payload;
+      state.responseSpecificProducts = null;
+      state.loading = false;
+      state.error = null;
+    },
   },
 });
 
@@ -248,6 +279,10 @@ export const {
   customersListSuccess,
   removeFromCart,
   removeAllFromCart,
+  fetchProductDetailsFromCart,
+  removeSpecificProduct,
+  getSpecificProductsFailed,
+  specificProductSuccess,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
