@@ -4,12 +4,11 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Box, Card, IconButton, Menu, MenuItem, Rating, TextField, Typography } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
+import { addToCart, underControl } from '../../../redux/userSlice';
 import { BasicButton, GreenButton } from '../../../utils/buttonStyles';
+import { getProductDetails, updateStuff } from '../../../redux/userHandler';
 import Popup from '../../../components/Popup';
-import { getProductDetails } from '../../../redux/userHandler';
-import { addToCart } from '../../../redux/userSlice';
 import { generateRandomColor, timeAgo } from '../../../utils/helperFunctions';
-
 
 const ViewOrder = () => {
     const dispatch = useDispatch();
@@ -19,7 +18,7 @@ const ViewOrder = () => {
     const { currentUser, currentRole, productDetails, loading, status, error, responseReview, responseDetails } = useSelector(state => state.user);
 
     useEffect(() => {
-        dispatch(getProductDetails(productID))
+        dispatch(getProductDetails(productID));
     }, [productID, dispatch]);
 
     const [rating, setRating] = useState(0);
@@ -30,113 +29,198 @@ const ViewOrder = () => {
 
     const [anchorElMenu, setAnchorElMenu] = useState(null);
 
+    const handleOpenMenu = (event) => {
+        setAnchorElMenu(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorElMenu(null);
+    };
+
     const handleRatingChange = (event, newRating) => {
-        setRating(newRating)
-    }
+        setRating(newRating);
+    };
+
+    const deleteHandler = (reviewId) => {
+        const fields = { reviewId };
+
+        dispatch(updateStuff(fields, productID, "deleteProductReview"));
+    };
+
+    const reviewer = currentUser && currentUser._id
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        if (rating === 0) {
+            setMessage("Please select a rating.");
+            setShowPopup(true);
+        } else {
+            const fields = { rating, comment, reviewer };
+            dispatch(updateStuff(fields, productID, "addReview"));
+            setRating(0);
+            setComment('');
+        }
+    };
+
+    useEffect(() => {
+        if (status === "updated") {
+            dispatch(getProductDetails(productID));
+            dispatch(underControl());
+        } else if (responseReview) {
+            setMessage("You have already submitted a review for this product.");
+            setShowPopup(true);
+        } else if (error) {
+            setMessage("Network Error");
+            setShowPopup(true);
+        }
+    }, [dispatch, responseReview, productID, status, error]);
 
     return (
         <>
-            {
-                loading ?
-                    <div>Loading...</div>
-                    :
-                    <>
-                        {
-                            responseDetails ?
-                                <div>Produc not found</div>
-                                :
-                                <>
-                                    <ProductContainer>
-                                        <ProductImage src={productDetails && productDetails.productImage} alt={productDetails && productDetails.productName} />
-                                        <ProductInfo>
-                                            <ProductName>{productDetails && productDetails.productName}</ProductName>
-                                            <PriceContainer>
-                                                <PriceCost>₹{productDetails && productDetails.price && productDetails.price.cost}</PriceCost>
-                                                <PriceMrp>₹{productDetails && productDetails.price && productDetails.price.mrp}</PriceMrp>
-                                                <PriceDiscount>{productDetails && productDetails.price && productDetails.price.discountPercent}% off</PriceDiscount>
-                                            </PriceContainer>
-                                            <Description>{productDetails && productDetails.description}</Description>
-                                            <ProductDetails>
-                                                <p>Category: {productDetails && productDetails.category}</p>
-                                                <p>Subcategory: {productDetails && productDetails.subcategory}</p>
-                                            </ProductDetails>
-                                        </ProductInfo>
-                                    </ProductContainer>
-                                    {
-                                        currentRole === "Customer" &&
-                                        <>
-                                            <ButtonContainer>
-                                                <BasicButton onClick={() => dispatch(addToCart(productDetails))}>
-                                                    Add to cart
-                                                </BasicButton>
-                                            </ButtonContainer>
-                                            <form>
-                                                <ReviewWritingContainer>
-                                                    <Box>
-                                                        <Rating
-                                                            name="racing"
-                                                            size='large'
-                                                            value={rating}
-                                                            onChange={handleRatingChange}
-                                                        />
-                                                    </Box>
-                                                    <TextField
-                                                        label="Write a Review"
-                                                        variant='standard'
-                                                        multiline
-                                                        value={comment}
-                                                        onChange={(e) => setComment(e.target.value)}
-                                                        sx={{ widht: "90%" }}
-                                                        required
-                                                    />
-                                                    <Box sx={{ textAlign: 'right', widht: '90%' }}>
-                                                        <GreenButton type="submit">
-                                                            Submit
-                                                        </GreenButton>
-                                                    </Box>
-                                                </ReviewWritingContainer>
-                                            </form>
-                                        </>
-                                    }
-                                    <ReviewWritingContainer>
-                                        <Typography variant="h4">Reviews</Typography>
-                                    </ReviewWritingContainer>
-                                    {
-                                        productDetails.reviews && productDetails.reviews.length > 0 ? (
-                                            <ReviewContainer>
-                                                {
-                                                    productDetails.reviews.map((review, index) => (
-                                                        <ReviewCard key={index}>
-                                                            <Avatar sx={{ width: "60px", height: "60px", marginRight: "1rem", backgroundColor: generateRandomColor(review._id) }}>
-                                                                {String(review.reviewer.name).charAt(0)}
-                                                            </Avatar>
-                                                            <ReviewDetails>
-                                                                <Typography variant='h6'>{review.reviewer.name}</Typography>
-                                                                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-                                                                    <Typography variant="body2">
-                                                                        {timeAgo(review.date)}
-                                                                    </Typography>
-                                                                </div>
-                                                                <Typography variant="subtitle1">Rating: {review.rating}</Typography>
-                                                                <Typography variant="body1">{review.comment}</Typography>
-                                                            </ReviewDetails>
-                                                        </ReviewCard>
-                                                    ))
-                                                }
-                                            </ReviewContainer>
-                                        )
-                                            :
-                                            <h1>da</h1>
-                                    }
-                                </>
-                        }
-                    </>
-            }
-        </>
-    )
-}
+            {loading ?
+                <div>Loading...</div>
+                :
+                <>
+                    {
+                        responseDetails ?
+                            <div>Product not found</div>
+                            :
+                            <>
+                                <ProductContainer>
+                                    <ProductImage src={productDetails && productDetails.productImage} alt={productDetails && productDetails.productName} />
+                                    <ProductInfo>
+                                        <ProductName>{productDetails && productDetails.productName}</ProductName>
+                                        <PriceContainer>
+                                            <PriceCost>₹{productDetails && productDetails.price && productDetails.price.cost}</PriceCost>
+                                            <PriceMrp>₹{productDetails && productDetails.price && productDetails.price.mrp}</PriceMrp>
+                                            <PriceDiscount>{productDetails && productDetails.price && productDetails.price.discountPercent}% off</PriceDiscount>
+                                        </PriceContainer>
+                                        <Description>{productDetails && productDetails.description}</Description>
+                                        <ProductDetails>
+                                            <p>Category: {productDetails && productDetails.category}</p>
+                                            <p>Subcategory: {productDetails && productDetails.subcategory}</p>
+                                        </ProductDetails>
+                                    </ProductInfo>
+                                </ProductContainer>
 
-export default ViewOrder
+                                {
+                                    currentRole === "Customer" &&
+                                    <>
+                                        <ButtonContainer>
+                                            <BasicButton
+                                                onClick={() => dispatch(addToCart(productDetails))}
+                                            >
+                                                Add to Cart
+                                            </BasicButton>
+                                        </ButtonContainer>
+
+                                        <form onSubmit={handleSubmit}>
+                                            <ReviewWritingContainer>
+                                                <Box>
+                                                    <Rating
+                                                        name="rating"
+                                                        value={rating}
+                                                        onChange={handleRatingChange}
+                                                        size="large"
+                                                    />
+                                                </Box>
+                                                <TextField
+                                                    label="Write a Review"
+                                                    variant="standard"
+                                                    multiline
+                                                    value={comment}
+                                                    onChange={(e) => setComment(e.target.value)}
+                                                    sx={{ width: "90%" }}
+                                                    required
+                                                />
+                                                <Box sx={{ textAlign: 'right', width: '90%' }}>
+                                                    <GreenButton type="submit">
+                                                        Submit
+                                                    </GreenButton>
+                                                </Box>
+                                            </ReviewWritingContainer>
+                                        </form>
+                                    </>
+                                }
+                                <ReviewWritingContainer>
+                                    <Typography variant="h4">Reviews</Typography>
+                                </ReviewWritingContainer>
+
+                                {productDetails.reviews && productDetails.reviews.length > 0 ? (
+                                    <ReviewContainer>
+                                        {productDetails.reviews.map((review, index) => (
+                                            <ReviewCard key={index}>
+                                                <ReviewCardDivision>
+                                                    <Avatar sx={{ width: "60px", height: "60px", marginRight: "1rem", backgroundColor: generateRandomColor(review._id) }}>
+                                                        {String(review.reviewer.name).charAt(0)}
+                                                    </Avatar>
+                                                    <ReviewDetails>
+                                                        <Typography variant="h6">{review.reviewer.name}</Typography>
+                                                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+
+                                                            <Typography variant="body2">
+                                                                {timeAgo(review.date)}
+                                                            </Typography>
+                                                        </div>
+                                                        <Typography variant="subtitle1">Rating: {review.rating}</Typography>
+                                                        <Typography variant="body1">{review.comment}</Typography>
+                                                    </ReviewDetails>
+                                                    {review.reviewer._id === reviewer &&
+                                                        <>
+                                                            <IconButton onClick={handleOpenMenu} sx={{ width: "4rem", color: 'inherit', p: 0 }}>
+                                                                <MoreVert sx={{ fontSize: "2rem" }} />
+                                                            </IconButton>
+                                                            <Menu
+                                                                id="menu-appbar"
+                                                                anchorEl={anchorElMenu}
+                                                                anchorOrigin={{
+                                                                    vertical: 'bottom',
+                                                                    horizontal: 'left',
+                                                                }}
+                                                                keepMounted
+                                                                transformOrigin={{
+                                                                    vertical: 'top',
+                                                                    horizontal: 'left',
+                                                                }}
+                                                                open={Boolean(anchorElMenu)}
+                                                                onClose={handleCloseMenu}
+                                                                onClick={handleCloseMenu}
+                                                            >
+                                                                <MenuItem onClick={() => {
+                                                                    handleCloseMenu()
+                                                                }}>
+                                                                    <Typography textAlign="center">Edit</Typography>
+                                                                </MenuItem>
+                                                                <MenuItem onClick={() => {
+                                                                    deleteHandler(review._id)
+                                                                    handleCloseMenu()
+                                                                }}>
+                                                                    <Typography textAlign="center">Delete</Typography>
+                                                                </MenuItem>
+                                                            </Menu>
+                                                        </>
+                                                    }
+                                                </ReviewCardDivision>
+                                            </ReviewCard>
+                                        ))}
+                                    </ReviewContainer>
+                                )
+                                    :
+                                    <ReviewWritingContainer>
+                                        <Typography variant="h6">No Reviews Found. Add a review.</Typography>
+                                    </ReviewWritingContainer>
+                                }
+                            </>
+                    }
+                </>
+            }
+            <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
+        </>
+    );
+};
+
+export default ViewOrder;
 
 const ProductContainer = styled.div`
     display: flex;

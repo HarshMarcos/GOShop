@@ -4,11 +4,13 @@ import { BlueButton } from '../../../utils/buttonStyles'
 import styled from 'styled-components'
 import { addStuff } from '../../../redux/userHandler'
 import Popup from '../../../components/Popup'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const AddProduct = () => {
 
     const dispatch = useDispatch();
+
+    const { currentUser, status, response, error } = useSelector(state => state.user);
 
     const [productName, setProductName] = useState("");
     const [mrp, setMrp] = useState("");
@@ -19,7 +21,7 @@ const AddProduct = () => {
     const [category, setCategory] = useState("");
     const [description, setDescription] = useState("");
     const [tagline, setTagline] = useState("");
-    const seller = "652ebf61b409f906d81645a3"
+    const seller = currentUser._id;
 
     const fields = {
         productName,
@@ -48,21 +50,21 @@ const AddProduct = () => {
         dispatch(addStuff(fields));
     }
 
-    // useEffect(() => {
-    //     if (status === "added") {
-    //         setLoader(false);
-    //         setShowPopup(true);
-    //         setMessage("Done Successfully");
-    //     } else if (status === 'failed') {
-    //         setMessage(response);
-    //         setShowPopup(true);
-    //         setLoader(false);
-    //     } else if (status === 'error') {
-    //         setLoader(false);
-    //         setMessage("Network Error");
-    //         setShowPopup(true);
-    //     }
-    // }, [status, response, error]);
+    useEffect(() => {
+        if (status === "added") {
+            setLoader(false);
+            setShowPopup(true);
+            setMessage("Done Successfully");
+        } else if (status === 'failed') {
+            setMessage(response);
+            setShowPopup(true);
+            setLoader(false);
+        } else if (status === 'error') {
+            setLoader(false);
+            setMessage("Network Error");
+            setShowPopup(true);
+        }
+    }, [status, response, error]);
     return (
         <>
             <Box

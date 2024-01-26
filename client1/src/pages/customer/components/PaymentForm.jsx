@@ -83,7 +83,7 @@ const PaymentForm = ({ handleBack }) => {
 
     useEffect(() => {
         if (status === 'added') {
-            navigate('/Aftermath');
+            window.open('/Aftermath');
         }
         else if (status === 'failed') {
             setMessage("Order Failed")
@@ -93,7 +93,7 @@ const PaymentForm = ({ handleBack }) => {
             setMessage("Network Error")
             setShowPopup(true)
         }
-    }, [status, navigate])
+    }, [status, navigate]);
 
     return (
         <React.Fragment>

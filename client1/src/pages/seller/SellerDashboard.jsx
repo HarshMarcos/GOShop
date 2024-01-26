@@ -45,14 +45,19 @@ const SellerDashboard = () => {
                         </IconButton>
                         <Typography
                             component="h1"
-                            variant='h6'
-                            color='inherit'
+                            variant="h6"
+                            color="inherit"
                             noWrap
                             sx={{
                                 mr: 2,
                                 flexGrow: 1,
                                 display: { xs: 'none', md: 'flex' },
                                 fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
+                                cursor: "pointer"
                             }}
                         >
                             <NavLogo
@@ -121,8 +126,9 @@ const SellerDashboard = () => {
                         <Route path='*' element={<Navigate to="/" />} />
                         <Route path="/Seller/dashboard" element={<SellerHomePage />} />
                         <Route path='/Seller/profile' element={<SellerProfile />} />
+
                         <Route path="/Seller/addproduct" element={<AddProduct />} />
-                        <Route path='Seller/orders/customers/:id' element={<ShowCustomers />} />
+                        <Route path='/Seller/orders/customers/:id' element={<ShowCustomers />} />
                         <Route path="/logout" element={<Logout />} />
                     </Routes>
                 </Box>

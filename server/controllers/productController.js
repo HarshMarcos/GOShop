@@ -256,6 +256,40 @@ const getAddedToCartProducts = async (req, res) => {
   }
 };
 
+const deleteProductReview = async (req, res) => {
+  try {
+    const { reviewId } = req.body;
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+
+    const updatedReviews = product.reviews.filter(
+      (review) => review._id != reviewId
+    );
+
+    product.reviews = updatedReviews;
+
+    const updatedProduct = await product.save();
+
+    res.send(updatedProduct);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const deleteAllProductReviews = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    product.reviews = [];
+
+    const updatedProduct = await product.save();
+
+    res.send(updatedProduct);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   createProduct,
   addReview,
@@ -269,4 +303,6 @@ module.exports = {
   getAddedToCartProducts,
   updateProduct,
   searchProductbySubCategory,
+  deleteProductReview,
+  deleteAllProductReviews,
 };
