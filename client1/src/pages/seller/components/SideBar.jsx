@@ -1,18 +1,21 @@
+import * as React from 'react';
 import { Divider, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import React from 'react'
-import { useSelector } from 'react-redux';
-import { useLocation, Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom';
+
 import WidgetsIcon from '@mui/icons-material/Widgets';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import LogoutIcon from '@mui/icons-material/Logout';
+import { useSelector } from 'react-redux';
 
 const SideBar = () => {
 
     const location = useLocation();
+
     const { currentRole } = useSelector(state => state.user);
+
     return (
         <>
             <React.Fragment>
@@ -21,7 +24,7 @@ const SideBar = () => {
                     sx={(location.pathname === "/" || location.pathname === "/Seller/dashboard") ? styles.currentStyle : styles.normalStyle}
                 >
                     <ListItemIcon>
-                        <WidgetsIcon sx={{ color: (location.pathname === "/" || location === "/Seller/dashboard") ? '#4d1c9c' : 'inherit' }} />
+                        <WidgetsIcon sx={{ color: (location.pathname === "/" || location.pathname === "/Seller/dashboard") ? '#4d1c9c' : 'inherit' }} />
                     </ListItemIcon>
                     <ListItemText primary="Home" />
                 </ListItemButton>
@@ -35,7 +38,6 @@ const SideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Products" />
                 </ListItemButton>
-
                 <ListItemButton
                     component={Link} to="/Seller/orders"
                     sx={location.pathname.startsWith('/Seller/orders') ? styles.currentStyle : styles.normalStyle}
@@ -47,9 +49,12 @@ const SideBar = () => {
                 </ListItemButton>
                 {
                     currentRole === "Shopcart" &&
-                    <ListItemButton>
+                    <ListItemButton
+                        component={Link} to="/Seller/shopcart"
+                        sx={location.pathname.startsWith('/Seller/shopcart') ? styles.currentStyle : styles.normalStyle}
+                    >
                         <ListItemIcon>
-                            <AdminPanelSettingsIcon />
+                            <AdminPanelSettingsIcon sx={{ color: location.pathname.startsWith("/Seller/shopcart") ? '#4d1c9c' : 'inherit' }} />
                         </ListItemIcon>
                         <ListItemText primary="Shopcart" />
                     </ListItemButton>
@@ -57,7 +62,10 @@ const SideBar = () => {
             </React.Fragment>
             <Divider sx={{ my: 1 }} />
             <React.Fragment>
-                <ListItemButton>
+                <ListItemButton
+                    component={Link} to="/Seller/profile"
+                    sx={location.pathname.startsWith('/Seller/profile') ? styles.currentStyle : styles.normalStyle}
+                >
                     <ListItemIcon>
                         <AccountCircleIcon sx={{ color: location.pathname.startsWith("/Seller/profile") ? '#4d1c9c' : 'inherit' }} />
                     </ListItemIcon>
@@ -72,13 +80,13 @@ const SideBar = () => {
                     </ListItemIcon>
                     <ListItemText primary="Logout" />
                 </ListItemButton>
+
             </React.Fragment>
         </>
-    )
+    );
 }
 
-export default SideBar
-
+export default SideBar;
 
 const styles = {
     normalStyle: {

@@ -51,3 +51,40 @@ export const GreenButton = styled(Button)`
     }
   }
 `;
+
+export const RedButton = styled(Button)`
+  && {
+    background-color: #f00;
+    color: white;
+    margin-left: 4px;
+    &:hover {
+      background-color: #eb7979;
+      border-color: #f26767;
+      box-shadow: none;
+    }
+  }
+`;
+
+export const DarkRedButton = styled(Button)`
+  && {
+    background-color: #650909;
+    color: white;
+    &:hover {
+      background-color: #eb7979;
+      border-color: #f26767;
+      box-shadow: none;
+    }
+  }
+`;
+
+export const BrownButton = styled(Button)`
+  && {
+    background-color: #2c1006;
+    color: white;
+    &:hover {
+      background-color: #40220c;
+      border-color: #40220c;
+      box-shadow: none;
+    }
+  }
+`;

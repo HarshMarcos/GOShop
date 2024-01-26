@@ -2,7 +2,7 @@ import { Box, CircularProgress, Stack, TextField } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { BlueButton } from '../../../utils/buttonStyles'
 import styled from 'styled-components'
-import { addStuff } from '../../../redux/userHandler'
+import { addStuff1 } from '../../../redux/userHandler'
 import Popup from '../../../components/Popup'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -47,7 +47,7 @@ const AddProduct = () => {
         e.preventDefault();
         setLoader(true);
         console.log(fields);
-        dispatch(addStuff(fields));
+        dispatch(addStuff1("CreateNewProduct", fields));
     }
 
     useEffect(() => {

@@ -6,13 +6,17 @@ import {
   authSuccess,
   customersListSuccess,
   getCustomersListFailed,
+  getDeleteSuccess,
   getError,
+  getFailed,
   getProductDetailsFailed,
   getRequest,
   getSearchFailed,
+  getSellerProductsFailed,
   getSpecificProductsFailed,
   productDetailsSuccess,
   productSuccess,
+  sellerProductSuccess,
   setFilteredProducts,
   specificProductSuccess,
   stuffUpdated,
@@ -192,5 +196,37 @@ export const getSpeicificProducts = (id, address) => async (dispatch) => {
     }
   } catch (error) {
     dispatch(getError());
+  }
+};
+
+export const getProductsbySeller = (id) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axios.get(
+      `http://localhost:8080/api/getSellerProducts/${id}`
+    );
+    if (result.data.message) {
+      dispatch(getSellerProductsFailed(result.data.message));
+    } else {
+      dispatch(sellerProductSuccess(result.data));
+    }
+  } catch (error) {}
+};
+
+export const deleteStuff = (id, address) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axios.delete(
+      `http://localhost:8080/api/${address}/${id}`
+    );
+    if (result.data.message) {
+      dispatch(getFailed(result.data.message));
+    } else {
+      dispatch(getDeleteSuccess());
+    }
+  } catch (error) {
+    dispatch(getError(error));
   }
 };

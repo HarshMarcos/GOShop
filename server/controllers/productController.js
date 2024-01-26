@@ -290,6 +290,40 @@ const deleteAllProductReviews = async (req, res) => {
   }
 };
 
+const getInterestedCustomers = async (req, res) => {
+  try {
+    const productId = req.params.id;
+
+    const interestedCustomers = await Customer.find({
+      "cartDetails._id": productId,
+    });
+
+    const customerDetails = interestedCustomers
+      .map((customer) => {
+        const cartItem = customer.cartDetails.find(
+          (item) => item._id.toString() === productId
+        );
+        if (cartItem) {
+          return {
+            customerName: customer.name,
+            customerID: customer._id,
+            quantity: cartItem.quantity,
+          };
+        }
+        return null; // If cartItem is not found in this customer's cartDetails
+      })
+      .filter((item) => item !== null); // Remove null values from the result
+
+    if (customerDetails.length > 0) {
+      res.send(customerDetails);
+    } else {
+      res.send({ message: "No customers are interested in this product." });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   createProduct,
   addReview,
@@ -305,4 +339,5 @@ module.exports = {
   searchProductbySubCategory,
   deleteProductReview,
   deleteAllProductReviews,
+  getInterestedCustomers,
 };

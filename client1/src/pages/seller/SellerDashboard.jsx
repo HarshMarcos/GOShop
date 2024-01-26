@@ -13,6 +13,8 @@ import Logout from '../Logout';
 import SellerHomePage from './pages/SellerHomePage';
 import SellerProfile from './pages/SellerProfile';
 import ShowCustomers from './pages/ShowCustomers';
+import ShowOrders from './pages/ShowOrders';
+import ShowProducts from './pages/ShowProducts';
 
 const SellerDashboard = () => {
     const [open, setOpen] = useState(false);
@@ -128,6 +130,9 @@ const SellerDashboard = () => {
                         <Route path='/Seller/profile' element={<SellerProfile />} />
 
                         <Route path="/Seller/addproduct" element={<AddProduct />} />
+                        <Route path='/Seller/products' element={<ShowProducts />} />
+
+                        <Route path='/Seller/orders' element={<ShowOrders />} />
                         <Route path='/Seller/orders/customers/:id' element={<ShowCustomers />} />
                         <Route path="/logout" element={<Logout />} />
                     </Routes>

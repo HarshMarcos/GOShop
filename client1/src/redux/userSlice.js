@@ -253,6 +253,28 @@ const userSlice = createSlice({
       state.error = null;
     },
   },
+  sellerProductSuccess: (state, action) => {
+    state.sellerProductData = action.payload;
+    state.responseSellerProducts = null;
+    state.loading = false;
+    state.error = null;
+  },
+  getSellerProductsFailed: (state, action) => {
+    state.responseSellerProducts = action.payload;
+    state.loading = false;
+    state.error = null;
+  },
+  getFailed: (state, action) => {
+    state.response = action.payload;
+    state.loading = false;
+    state.error = null;
+  },
+  getDeleteSuccess: (state) => {
+    state.status = "deleted";
+    state.loading = false;
+    state.error = null;
+    state.response = null;
+  },
 });
 
 export const {
@@ -283,6 +305,10 @@ export const {
   removeSpecificProduct,
   getSpecificProductsFailed,
   specificProductSuccess,
+  sellerProductSuccess,
+  getSellerProductsFailed,
+  getDeleteSuccess,
+  getFailed,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
