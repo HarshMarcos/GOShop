@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { BasicButton, BrownButton, DarkRedButton, IndigoButton } from '../../../utils/buttonStyles';
 import { useNavigate } from 'react-router-dom';
-import { deleteStuff, getProductsbySeller } from '../../../redux/userHandler.js';
+import { deleteStuff, getProductsbySeller } from '../../../redux/userHandler';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate.jsx';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -26,6 +26,8 @@ const ShowProducts = () => {
     useEffect(() => {
         dispatch(getProductsbySeller(currentUser._id));
     }, [dispatch, currentUser._id])
+
+
 
     const deleteHandler = (deleteID, address) => {
         dispatch(deleteStuff(deleteID, address))
@@ -72,69 +74,61 @@ const ShowProducts = () => {
 
     return (
         <>
-            {loading ?
+            {loading ? (
                 <div>Loading...</div>
-                :
+            ) : (
                 <>
-                    {
-                        responseSellerProducts ?
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
-                                <IndigoButton onClick={() => navigate("/Seller/addproduct")}>
-                                    Add Product
-                                </IndigoButton>
-                                <br /><br />
-                                {
-                                    currentRole === "Shopcart" &&
-                                    <BrownButton onClick={() => navigate("/Seller/uploadproducts")}>
-                                        Upload Product
-                                    </BrownButton>
-                                }
-                            </Box>
-                            :
-                            <>
-                                {Array.isArray(sellerProductData) && sellerProductData.length > 0 &&
-                                    <ProductGrid container spacing={3}>
-                                        {sellerProductData.map((data, index) => (
-                                            <Grid item xs={12} sm={6} md={4}
-                                                key={index}
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                        <IndigoButton onClick={() => navigate("/Seller/addproduct")}>
+                            Add Product
+                        </IndigoButton>
+                        <br /><br />
+                        {currentRole === "Shopcart" && (
+                            <BrownButton onClick={() => navigate("/Seller/uploadproducts")}>
+                                Upload Product
+                            </BrownButton>
+                        )}
+                    </Box>
+                    {Array.isArray(sellerProductData) && sellerProductData.length > 0 ? (
+                        <ProductGrid container spacing={3}>
+                            {sellerProductData.map((data, index) => (
+                                <Grid item xs={12} sm={6} md={4} key={index}>
+                                    <ProductContainer>
+                                        <ProductImage src={data.productImage} />
+                                        <ProductName>{data.productName}</ProductName>
+                                        <PriceMrp>MRP: {data.price.mrp}</PriceMrp>
+                                        <PriceCost>Cost: ₹{data.price.cost}</PriceCost>
+                                        <PriceDiscount>{data.price.discountPercent}% off</PriceDiscount>
+                                        <ButtonContainer>
+                                            <DarkRedButton
+                                                onClick={() => deleteHandler(data._id, "DeleteProduct")}
                                             >
-                                                <ProductContainer>
-                                                    <ProductImage src={data.productImage} />
-                                                    <ProductName>{data.productName}</ProductName>
-                                                    <PriceMrp>{data.price.mrp}</PriceMrp>
-                                                    <PriceCost>₹{data.price.cost}</PriceCost>
-                                                    <PriceDiscount>{data.price.discountPercent}% off</PriceDiscount>
-                                                    <ButtonContainer>
-                                                        <DarkRedButton
-                                                            onClick={() => deleteHandler(data._id, "DeleteProduct")}
-                                                        >
-                                                            Delete
-                                                        </DarkRedButton>
-                                                        <BasicButton
-                                                            onClick={() => navigate("/Seller/products/product/" + data._id)}
-                                                        >
-                                                            View
-                                                        </BasicButton>
-                                                    </ButtonContainer>
-                                                </ProductContainer>
-                                            </Grid>
-                                        ))}
-                                    </ProductGrid>
-                                }
-                                {
-                                    currentRole === "Shopcart"
-                                        ?
-                                        <SpeedDialTemplate actions={shopcartActions} />
-                                        :
-                                        <SpeedDialTemplate actions={actions} />
-                                }
-                            </>
-                    }
+                                                Delete
+                                            </DarkRedButton>
+                                            <BasicButton
+                                                onClick={() => navigate("/Seller/products/product/" + data._id)}
+                                            >
+                                                View
+                                            </BasicButton>
+                                        </ButtonContainer>
+                                    </ProductContainer>
+                                </Grid>
+                            ))}
+                        </ProductGrid>
+                    ) : (
+                        <div>No products found.</div>
+                    )}
+                    {currentRole === "Shopcart" ? (
+                        <SpeedDialTemplate actions={shopcartActions} />
+                    ) : (
+                        <SpeedDialTemplate actions={actions} />
+                    )}
                 </>
-            }
+            )}
             <AlertDialogSlide dialog={dialog} showDialog={showDialog} setShowDialog={setShowDialog} taskHandler={deleteAllProducts} />
         </>
-    )
+    );
+
 };
 
 export default ShowProducts;

@@ -9,6 +9,7 @@ const {
 const {
   newOrder,
   getOrderedProductsByCustomer,
+  getOrderedProductsBySeller,
 } = require("../controllers/orderController.js");
 const {
   createProduct,
@@ -45,6 +46,7 @@ router.post("/SellerLogIn", sellerLogIn);
 //orders
 router.post("/newOrder", newOrder);
 router.get("/getOrderedProductsByCustomer/:id", getOrderedProductsByCustomer);
+router.get("/getOrderedProductsBySeller/:id", getOrderedProductsBySeller);
 
 //product
 router.post("/CreateNewProduct", createProduct);

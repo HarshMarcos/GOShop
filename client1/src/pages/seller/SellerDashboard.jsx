@@ -15,6 +15,7 @@ import SellerProfile from './pages/SellerProfile';
 import ShowCustomers from './pages/ShowCustomers';
 import ShowOrders from './pages/ShowOrders';
 import ShowProducts from './pages/ShowProducts';
+import ViewProductSeller from './pages/ViewProductSeller';
 
 const SellerDashboard = () => {
     const [open, setOpen] = useState(false);
@@ -131,6 +132,7 @@ const SellerDashboard = () => {
 
                         <Route path="/Seller/addproduct" element={<AddProduct />} />
                         <Route path='/Seller/products' element={<ShowProducts />} />
+                        <Route path='/Seller/products/product/:id' element={<ViewProductSeller />} />
 
                         <Route path='/Seller/orders' element={<ShowOrders />} />
                         <Route path='/Seller/orders/customers/:id' element={<ShowCustomers />} />

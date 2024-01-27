@@ -50,21 +50,21 @@ const AddProduct = () => {
         dispatch(addStuff1("CreateNewProduct", fields));
     }
 
-    useEffect(() => {
-        if (status === "added") {
-            setLoader(false);
-            setShowPopup(true);
-            setMessage("Done Successfully");
-        } else if (status === 'failed') {
-            setMessage(response);
-            setShowPopup(true);
-            setLoader(false);
-        } else if (status === 'error') {
-            setLoader(false);
-            setMessage("Network Error");
-            setShowPopup(true);
-        }
-    }, [status, response, error]);
+    // useEffect(() => {
+    //     if (status === "added") {
+    //         setLoader(false);
+    //         setShowPopup(true);
+    //         setMessage("Done Successfully");
+    //     } else if (status === 'failed') {
+    //         setMessage(response);
+    //         setShowPopup(true);
+    //         setLoader(false);
+    //     } else if (status === 'error') {
+    //         setLoader(false);
+    //         setMessage("Network Error");
+    //         setShowPopup(true);
+    //     }
+    // }, [status, response, error]);
     return (
         <>
             <Box
@@ -100,7 +100,7 @@ const AddProduct = () => {
                                     value={productImage}
                                     onChange={(event) => setProductImage(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                                 <TextField
@@ -110,7 +110,7 @@ const AddProduct = () => {
                                     value={productName}
                                     onChange={(event) => setProductName(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                                 <TextField
@@ -120,7 +120,7 @@ const AddProduct = () => {
                                     value={description}
                                     onChange={(event) => setDescription(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                                 <TextField
@@ -130,7 +130,7 @@ const AddProduct = () => {
                                     value={mrp}
                                     onChange={(event) => setMrp(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                                 <TextField
@@ -140,7 +140,7 @@ const AddProduct = () => {
                                     value={cost}
                                     onChange={(event) => setCost(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                                 <TextField
@@ -150,7 +150,7 @@ const AddProduct = () => {
                                     value={discountPercent}
                                     onChange={(event) => setDiscountPercent(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                                 <TextField
@@ -160,7 +160,7 @@ const AddProduct = () => {
                                     value={category}
                                     onChange={(event) => setCategory(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                                 <TextField
@@ -170,7 +170,7 @@ const AddProduct = () => {
                                     value={subcategory}
                                     onChange={(event) => setSubcategory(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                                 <TextField
@@ -180,7 +180,7 @@ const AddProduct = () => {
                                     value={tagline}
                                     onChange={(event) => setTagline(event.target.value)}
                                     InputLabelProps={{
-                                        shrinkt: true,
+                                        shrinkt: "true",
                                     }}
                                 />
                             </Stack>

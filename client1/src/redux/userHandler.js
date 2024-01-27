@@ -207,8 +207,10 @@ export const getProductsbySeller = (id) => async (dispatch) => {
       `http://localhost:8080/api/getSellerProducts/${id}`
     );
     if (result.data.message) {
+      // console.log(`In IF ${result}`);
       dispatch(getSellerProductsFailed(result.data.message));
     } else {
+      // console.log(`In else ${result}`);
       dispatch(sellerProductSuccess(result.data));
     }
   } catch (error) {}

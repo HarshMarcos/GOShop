@@ -44,8 +44,44 @@ const getOrderedProductsByCustomer = async (req, res) => {
     res.status(500).json(err);
   }
 };
+const getOrderedProductsBySeller = async (req, res) => {
+  try {
+    const sellerId = req.params.id;
+
+    const ordersWithSellerId = await Order.find({
+      "orderedProducts.seller": sellerId,
+    });
+
+    if (ordersWithSellerId.length > 0) {
+      const orderedProducts = ordersWithSellerId.reduce(
+        (accumulator, order) => {
+          order.orderedProducts.forEach((product) => {
+            const existingProductIndex = accumulator.findIndex(
+              (p) => p._id.toString() === product._id.toString()
+            );
+            if (existingProductIndex !== -1) {
+              // If product already exists, merge quantities
+              accumulator[existingProductIndex].quantity += product.quantity;
+            } else {
+              // If product doesn't exist, add it to accumulator
+              accumulator.push(product);
+            }
+          });
+          return accumulator;
+        },
+        []
+      );
+      res.send(orderedProducts);
+    } else {
+      res.send({ message: "No products found" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
 
 module.exports = {
   newOrder,
   getOrderedProductsByCustomer,
+  getOrderedProductsBySeller,
 };
